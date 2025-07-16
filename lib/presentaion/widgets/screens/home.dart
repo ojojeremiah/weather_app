@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/model/weather_forecast.dart';
-import 'package:weather_app/provider/provider.dart';
-import 'package:weather_app/screens/weathers.dart';
+import 'package:weather_app/presentaion/presntaion%20_logic_%20holder/provider/provider.dart';
+import 'package:weather_app/presentaion/widgets/screens/weathers.dart';
 import 'package:weather_app/utils/app_colors.dart';
+
+import '../../presntaion _logic_ holder/dependecy_injector.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,9 +22,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<WeatherNotifier>(context, listen: false).fetchWeatherData();
-    });
+    getIt<WeatherNotifier>().fetchWeatherData();
   }
 
   @override
@@ -59,11 +59,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 70),
+                        padding:  EdgeInsets.only(top: 70.sp),
                         child: Text(
                           weather?.location.region ?? 'Unknown Region',
-                          style: const TextStyle(
-                            fontSize: 34,
+                          style:  TextStyle(
+                            fontSize: 34.sp,
                             fontWeight: FontWeight.w400,
                             color: AppColors.primaryColor,
                             letterSpacing: 0.37,
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Text(
                             'L: ${weather?.forecast?.forecastday?[0].day?.mintempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.mintempC) : '--'}°',
                             style:
-                                const TextStyle(color: AppColors.primaryColor),
+                            const TextStyle(color: AppColors.primaryColor),
                           ),
                         ],
                       ),

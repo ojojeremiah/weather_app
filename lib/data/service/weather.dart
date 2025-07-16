@@ -2,18 +2,17 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:weather_app/model/weather_forecast.dart';
-import 'package:weather_app/repository/WeatherRepository.dart';
-import 'package:weather_app/service/dio.dart';
-import 'package:weather_app/service/dio_exception.dart';
-import 'package:weather_app/service/endpoints.dart';
+import 'package:weather_app/domiain/model/weather_forecast.dart';
+import 'package:weather_app/data/service/dio.dart';
+import 'package:weather_app/data/service/dio_exception.dart';
+import 'package:weather_app/data/service/endpoints.dart';
 import 'package:weather_app/utils/app_colors.dart';
 
-class WeatherApiServiceImpl implements WeatherRepository {
-  final DioClient dioClient = DioClient();
-  // WeatherApiServiceImpl(Current);
+class WeatherApiServiceImpl {
+  final DioClient dioClient;
 
-  @override
+  WeatherApiServiceImpl({required this.dioClient});
+
   Future<Weather> getWeatherData() async {
     try {
       final response = await dioClient.get(

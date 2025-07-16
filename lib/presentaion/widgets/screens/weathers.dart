@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_shadow/flutter_inner_shadow.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:weather_app/model/all_weather.dart';
-import '../utils/app_colors.dart';
+import 'package:weather_app/domiain/model/all_weather.dart';
+import 'package:weather_app/utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
 class Weathers extends StatefulWidget {

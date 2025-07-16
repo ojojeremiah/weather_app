@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/model/weather_forecast.dart';
-import 'package:weather_app/repository/WeatherRepository.dart';
-import 'package:weather_app/service/weather.dart';
+import 'package:weather_app/data/service/weather.dart';
+import 'package:weather_app/domiain/model/weather_forecast.dart';
+import 'package:weather_app/domiain/use_case.dart';
 
-/// Represents various states of the weather data fetching/updating lifecycle
 enum WeatherDataState {
   idle,
   adding,
@@ -14,19 +13,19 @@ enum WeatherDataState {
 }
 
 class WeatherNotifier extends ChangeNotifier {
-  final WeatherRepository weatherRepository;
+  final WeatherApiServiceImpl weatherApiServiceImpl;
 
   WeatherDataState _dataState = WeatherDataState.idle;
   String _errorMessage = '';
   String _successMessage = '';
-  Weather? weathers;
+  Weather? _weather;
 
   WeatherDataState get weatherState => _dataState;
   String get errorMessage => _errorMessage;
   String get successMessage => _successMessage;
-  Weather? get weather => weathers;
+  Weather? get weather => _weather;
 
-  WeatherNotifier() : weatherRepository = WeatherApiServiceImpl();
+  WeatherNotifier({required this.weatherApiServiceImpl});
 
   void _setState({
     required WeatherDataState newState,
@@ -43,8 +42,8 @@ class WeatherNotifier extends ChangeNotifier {
     _setState(newState: WeatherDataState.loading);
 
     try {
-      final result = await weatherRepository.getWeatherData();
-      weathers = result;
+      final result = await WeatherUseCase(weatherApiServiceImpl).call();
+      _weather = result;
       _setState(newState: WeatherDataState.success);
     } catch (e) {
       _setState(newState: WeatherDataState.error, errorMessage: e.toString());
@@ -56,8 +55,13 @@ class WeatherNotifier extends ChangeNotifier {
   }
 
   Future<Weather> getWeather() async {
-    if (weather != null) return weather!;
-    await fetchWeatherData();
-    return weather ?? (throw Exception('Failed to fetch weather data'));
+    if (_weather != null) return _weather!;
+    try {
+      final result = await WeatherUseCase(weatherApiServiceImpl).call();
+      _weather = result;
+      return _weather!;
+    } catch (_) {
+      throw Exception('Failed to fetch weather data');
+    }
   }
 }

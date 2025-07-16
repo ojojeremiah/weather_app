@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import '../helper/helper.dart';
+import '../../helper/helper.dart';
 import 'endpoints.dart';
 
 class DioClient {
   final Dio _dio = Dio();
 
-  DioClient() {
+  DioClient(param0) {
     _dio
       ..options.connectTimeout =
           const Duration(seconds: Endpoints.connectionTimeout)

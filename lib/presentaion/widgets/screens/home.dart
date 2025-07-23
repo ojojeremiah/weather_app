@@ -59,10 +59,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:  EdgeInsets.only(top: 70.sp),
+                        padding: EdgeInsets.only(top: 70.sp),
                         child: Text(
                           weather?.location.region ?? 'Unknown Region',
-                          style:  TextStyle(
+                          style: TextStyle(
                             fontSize: 34.sp,
                             fontWeight: FontWeight.w400,
                             color: AppColors.primaryColor,
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           Text(
                             'L: ${weather?.forecast?.forecastday?[0].day?.mintempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.mintempC) : '--'}°',
                             style:
-                            const TextStyle(color: AppColors.primaryColor),
+                                const TextStyle(color: AppColors.primaryColor),
                           ),
                         ],
                       ),

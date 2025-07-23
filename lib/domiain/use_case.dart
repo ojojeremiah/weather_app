@@ -6,7 +6,7 @@ class WeatherUseCase {
 
   WeatherUseCase(this._weatherApiServiceImpl);
 
-  Future<Weather> call() async {
+  Future<(Weather?, String)> call() async {
     return await _weatherApiServiceImpl.getWeatherData();
   }
 }

@@ -52,57 +52,75 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Consumer<WeatherNotifier>(
             builder: (context, weatherNotifier, child) {
               final weather = weatherNotifier.weather;
+
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding:  EdgeInsets.only(top: 70.sp),
-                        child: Text(
-                          weather?.location.region ?? 'Unknown Region',
-                          style:  TextStyle(
-                            fontSize: 34.sp,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.primaryColor,
-                            letterSpacing: 0.37,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${weather?.current.tempC.round().toString()}°',
-                        style: const TextStyle(
-                          fontSize: 96,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w200,
-                          letterSpacing: 0.37,
-                        ),
-                      ),
-                      Text(
-                        weather?.current.condition?.text ?? 'Unknown Condition',
-                        style: const TextStyle(
-                          color: AppColors.colorGrey,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      weather == null
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 70.sp),
+                              child: const CircularProgressIndicator(),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(top: 70.sp),
+                              child: Text(
+                                "${weather?.location.region}",
+                                style: TextStyle(
+                                  fontSize: 34.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.primaryColor,
+                                  letterSpacing: 0.37,
+                                ),
+                              ),
+                            ),
+                      weather == null
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              '${weather?.current.tempC.round().toString()}°',
+                              style: const TextStyle(
+                                fontSize: 96,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w200,
+                                letterSpacing: 0.37,
+                              ),
+                            ),
+                      weather == null
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              weather?.current.condition?.text ??
+                                  'Unknown Condition',
+                              style: const TextStyle(
+                                color: AppColors.colorGrey,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Text(
-                              'H: ${weather?.forecast?.forecastday?[0].day?.maxtempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.maxtempC) : '--'}°',
-                              style: const TextStyle(
-                                  color: AppColors.primaryColor),
-                            ),
-                          ),
-                          Text(
-                            'L: ${weather?.forecast?.forecastday?[0].day?.mintempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.mintempC) : '--'}°',
-                            style:
-                            const TextStyle(color: AppColors.primaryColor),
-                          ),
+                          weather == null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: const CircularProgressIndicator(),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    'H: ${weather?.forecast?.forecastday?[0].day?.maxtempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.maxtempC) : '--'}°',
+                                    style: const TextStyle(
+                                        color: AppColors.primaryColor),
+                                  ),
+                                ),
+                          weather == null
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'L: ${weather?.forecast?.forecastday?[0].day?.mintempC != null ? NumberFormat('#').format(weather?.forecast?.forecastday?[0].day?.mintempC) : '--'}°',
+                                  style: const TextStyle(
+                                      color: AppColors.primaryColor),
+                                ),
                         ],
                       ),
                     ],
@@ -136,7 +154,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       color: Color(0x4D000000),
                     ),
                   ),
-                  // TabBar
+
                   TabBar(
                     controller: _tabController,
                     isScrollable: true,
@@ -175,7 +193,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 weatherNotifier
                                     .weather!.forecast!.forecastday!.isEmpty) {
                               return const Center(
-                                  child: Text('No hourly data available'));
+                                  child: CircularProgressIndicator());
                             }
                             return SizedBox(
                               height: 130,

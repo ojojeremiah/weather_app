@@ -1,12 +1,9 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:weather_app/domiain/model/weather_forecast.dart';
 import 'package:weather_app/data/service/dio.dart';
-import 'package:weather_app/data/service/dio_exception.dart';
 import 'package:weather_app/data/service/endpoints.dart';
-import 'package:weather_app/utils/app_colors.dart';
 
 class WeatherApiServiceImpl {
   final DioClient dioClient;

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:weather_app/data/service/weather.dart';
 import 'package:weather_app/domiain/model/weather_forecast.dart';
 import 'package:weather_app/domiain/use_case.dart';
-
-import '../dependecy_injector.dart';
 
 enum WeatherDataState {
   idle,
@@ -16,7 +13,7 @@ enum WeatherDataState {
 }
 
 class WeatherNotifier extends ChangeNotifier {
-  final WeatherApiServiceImpl weatherApiServiceImpl;
+  final WeatherUseCase weatherUseCase;
 
   WeatherDataState _dataState = WeatherDataState.idle;
   String _errorMessage = '';
@@ -28,7 +25,7 @@ class WeatherNotifier extends ChangeNotifier {
   String get successMessage => _successMessage;
   Weather? get weather => _weather;
 
-  WeatherNotifier({required this.weatherApiServiceImpl});
+  WeatherNotifier(this.weatherUseCase);
 
   void _setState({
     required WeatherDataState newState,
@@ -44,7 +41,7 @@ class WeatherNotifier extends ChangeNotifier {
   Future<void> fetchWeatherData() async {
     _setState(newState: WeatherDataState.loading);
 
-    final result = await getIt<WeatherUseCase>().call();
+    final result = await weatherUseCase.call(); // ✅ use the injected dependency
     _weather = result.$1;
     final errorMessage = result.$2;
 
@@ -59,7 +56,8 @@ class WeatherNotifier extends ChangeNotifier {
   Future<Weather> getWeather() async {
     if (_weather != null) return _weather!;
     try {
-      final result = await getIt<WeatherUseCase>().call();
+      final result =
+          await weatherUseCase.call(); // ✅ use the injected dependency
       _weather = result.$1;
       return _weather!;
     } catch (_) {

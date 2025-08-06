@@ -10,9 +10,7 @@ final getIt = GetIt.instance;
 Future<void> dependencyInjection() async {
   getIt.registerSingleton(Dio());
   getIt.registerSingleton(DioClient(getIt<Dio>()));
-  getIt.registerSingleton<WeatherApiServiceImpl>(
-      WeatherApiServiceImpl(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(
-      WeatherNotifier(weatherApiServiceImpl: getIt<WeatherApiServiceImpl>()));
+  getIt.registerSingleton(WeatherApiServiceImpl(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(WeatherUseCase(getIt<WeatherApiServiceImpl>()));
+  getIt.registerSingleton(WeatherNotifier(getIt<WeatherUseCase>()));
 }

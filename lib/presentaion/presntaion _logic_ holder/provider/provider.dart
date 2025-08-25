@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/data/service/weather.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:weather_app/domiain/model/weather_forecast.dart';
 import 'package:weather_app/domiain/use_case.dart';
 
@@ -13,7 +13,7 @@ enum WeatherDataState {
 }
 
 class WeatherNotifier extends ChangeNotifier {
-  final WeatherApiServiceImpl weatherApiServiceImpl;
+  final WeatherUseCase weatherUseCase;
 
   WeatherDataState _dataState = WeatherDataState.idle;
   String _errorMessage = '';
@@ -25,7 +25,7 @@ class WeatherNotifier extends ChangeNotifier {
   String get successMessage => _successMessage;
   Weather? get weather => _weather;
 
-  WeatherNotifier({required this.weatherApiServiceImpl});
+  WeatherNotifier(this.weatherUseCase);
 
   void _setState({
     required WeatherDataState newState,
@@ -41,24 +41,24 @@ class WeatherNotifier extends ChangeNotifier {
   Future<void> fetchWeatherData() async {
     _setState(newState: WeatherDataState.loading);
 
-    try {
-      final result = await WeatherUseCase(weatherApiServiceImpl).call();
-      _weather = result;
-      _setState(newState: WeatherDataState.success);
-    } catch (e) {
-      _setState(newState: WeatherDataState.error, errorMessage: e.toString());
-    }
+    final result = await weatherUseCase.call(); // ✅ use the injected dependency
+    _weather = result.$1;
+    final errorMessage = result.$2;
 
-    Future.delayed(const Duration(seconds: 5), () {
-      _setState(newState: WeatherDataState.idle);
-    });
+    if (_weather == null) {
+      _setState(newState: WeatherDataState.error);
+      Fluttertoast.showToast(msg: errorMessage);
+    } else {
+      _setState(newState: WeatherDataState.success);
+    }
   }
 
   Future<Weather> getWeather() async {
     if (_weather != null) return _weather!;
     try {
-      final result = await WeatherUseCase(weatherApiServiceImpl).call();
-      _weather = result;
+      final result =
+          await weatherUseCase.call(); // ✅ use the injected dependency
+      _weather = result.$1;
       return _weather!;
     } catch (_) {
       throw Exception('Failed to fetch weather data');

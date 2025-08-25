@@ -2,11 +2,11 @@ import 'package:weather_app/data/service/weather.dart';
 import 'package:weather_app/domiain/model/weather_forecast.dart';
 
 class WeatherUseCase {
-  final WeatherApiServiceImpl _weatherApiServiceImpl;
+  final WeatherApiServiceImpl weatherApiServiceImpl;
 
-  WeatherUseCase(this._weatherApiServiceImpl);
+  WeatherUseCase(this.weatherApiServiceImpl);
 
-  Future<Weather> call() async {
-    return await _weatherApiServiceImpl.getWeatherData();
+  Future<(Weather?, String)> call() async {
+    return await weatherApiServiceImpl.getWeatherData();
   }
 }
